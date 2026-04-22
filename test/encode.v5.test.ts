@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { encodePayload, encodeV5 } from '../src/encode';
+import { BarcodeErrorCode } from '../src/errors';
 
 const vectors = [
   {
@@ -58,5 +59,46 @@ describe('encodeV5', () => {
 
   it('encodePayload dispatches to v5 for RF reference', () => {
     expect(encodePayload(vectors[0].input)).toBe(vectors[0].expected);
+  });
+
+  it('rejects overlong RF references as invalid input', () => {
+    try {
+      encodeV5({
+        iban: 'FI79 4405 2020 0360 82',
+        amount: 1,
+        rfReference: 'RF19123456789012345678901234',
+        dueDate: '2010-06-12',
+      });
+      throw new Error('expected overlong RF reference to throw');
+    } catch (error) {
+      expect((error as { code?: string }).code).toBe(BarcodeErrorCode.INVALID_RF_REFERENCE);
+    }
+  });
+
+  it('dispatches based on non-empty reference values', () => {
+    expect(
+      encodePayload({
+        iban: vectors[0].input.iban,
+        amount: vectors[0].input.amount,
+        rfReference: vectors[0].input.rfReference,
+        dueDate: vectors[0].input.dueDate,
+        reference: undefined,
+      } as unknown as Parameters<typeof encodePayload>[0]),
+    ).toBe(vectors[0].expected);
+  });
+
+  it('rejects empty reference selectors in dispatcher', () => {
+    try {
+      encodePayload({
+        iban: vectors[0].input.iban,
+        amount: vectors[0].input.amount,
+        dueDate: vectors[0].input.dueDate,
+        reference: '   ',
+        rfReference: '',
+      } as unknown as Parameters<typeof encodePayload>[0]);
+      throw new Error('expected INVALID_INPUT');
+    } catch (error) {
+      expect((error as { code?: string }).code).toBe(BarcodeErrorCode.INVALID_INPUT);
+    }
   });
 });

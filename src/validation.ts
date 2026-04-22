@@ -110,6 +110,13 @@ export const validateRFReference = (ref: string): string => {
     );
   }
 
+  if (normalized.length > 25) {
+    throw new BarcodeError(
+      BarcodeErrorCode.INVALID_RF_REFERENCE,
+      'RF reference is too long for Finnish barcode v5 encoding.',
+    );
+  }
+
   const rearranged = normalized.slice(4) + normalized.slice(0, 4);
   if (mod97(rearranged) !== 1) {
     throw new BarcodeError(BarcodeErrorCode.INVALID_RF_REFERENCE, 'RF reference checksum failed.');
@@ -124,23 +131,35 @@ export const validateDueDate = (date: DueDateInput): string => {
     return '000000';
   }
 
-  let parsed: Date | null = null;
+  let year: number | null = null;
+  let month: number | null = null;
+  let day: number | null = null;
+
   if (date instanceof Date) {
-    parsed = Number.isNaN(date.getTime()) ? null : new Date(date.getTime());
+    if (!Number.isNaN(date.getTime())) {
+      year = date.getFullYear();
+      month = date.getMonth() + 1;
+      day = date.getDate();
+    }
   } else if (typeof date === 'string') {
-    parsed = parseIsoDate(date);
+    const parsed = parseIsoDate(date);
+    if (parsed) {
+      year = parsed.getUTCFullYear();
+      month = parsed.getUTCMonth() + 1;
+      day = parsed.getUTCDate();
+    }
   }
 
-  if (!parsed) {
+  if (year == null || month == null || day == null) {
     throw new BarcodeError(
       BarcodeErrorCode.INVALID_DUE_DATE,
       'Due date must be a Date, YYYY-MM-DD string, null, or undefined.',
     );
   }
 
-  const yy = String(parsed.getUTCFullYear() % 100).padStart(2, '0');
-  const mm = String(parsed.getUTCMonth() + 1).padStart(2, '0');
-  const dd = String(parsed.getUTCDate()).padStart(2, '0');
+  const yy = String(year % 100).padStart(2, '0');
+  const mm = String(month).padStart(2, '0');
+  const dd = String(day).padStart(2, '0');
 
   return `${yy}${mm}${dd}`;
 };

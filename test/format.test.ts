@@ -21,4 +21,8 @@ describe('format helpers', () => {
   it('formats due date as pp.kk.vvvv', () => {
     expect(formatDueDate('2012-01-31')).toBe('31.1.2012');
   });
+
+  it('preserves 4-digit year from ISO input', () => {
+    expect(formatDueDate('2099-12-24')).toBe('24.12.2099');
+  });
 });

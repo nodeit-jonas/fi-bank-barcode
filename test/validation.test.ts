@@ -116,6 +116,15 @@ describe('validateRFReference', () => {
       expect((error as { code?: string }).code).toBe(BarcodeErrorCode.INVALID_RF_REFERENCE);
     }
   });
+
+  it('rejects RF references longer than v5 allows', () => {
+    try {
+      validateRFReference('RF19123456789012345678901234');
+      throw new Error('expected overlong RF reference to throw');
+    } catch (error) {
+      expect((error as { code?: string }).code).toBe(BarcodeErrorCode.INVALID_RF_REFERENCE);
+    }
+  });
 });
 
 describe('validateDueDate', () => {
@@ -127,6 +136,7 @@ describe('validateDueDate', () => {
   it('formats Date and ISO date strings', () => {
     expect(validateDueDate('2012-01-31')).toBe('120131');
     expect(validateDueDate(new Date('2012-01-31T00:00:00.000Z'))).toBe('120131');
+    expect(validateDueDate(new Date(2012, 0, 31))).toBe('120131');
   });
 
   it('rejects invalid date strings with code', () => {

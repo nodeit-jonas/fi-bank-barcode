@@ -35,7 +35,12 @@ const toB64 = (value: string): string => {
   if (typeof Buffer !== 'undefined') {
     return Buffer.from(value, 'utf8').toString('base64');
   }
-  return btoa(unescape(encodeURIComponent(value)));
+  const bytes = new TextEncoder().encode(value);
+  let binary = '';
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+  return btoa(binary);
 };
 
 const buildBwipOptions = (payload: string, options: Required<BarcodeRenderOptions>) => ({

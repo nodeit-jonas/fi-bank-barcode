@@ -45,10 +45,16 @@ export const formatAmount = (amount: number, locale = 'fi-FI'): string => {
 
 /** Format due date as d.m.yyyy. */
 export const formatDueDate = (date: Date | string): string => {
-  const compact = validateDueDate(date);
-  const yy = Number(compact.slice(0, 2));
-  const mm = Number(compact.slice(2, 4));
-  const dd = Number(compact.slice(4, 6));
-  const yyyy = yy >= 70 ? 1900 + yy : 2000 + yy;
-  return `${dd}.${mm}.${yyyy}`;
+  validateDueDate(date);
+
+  if (typeof date === 'string') {
+    const isoDateMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+    if (isoDateMatch) {
+      const [, yyyy, mm, dd] = isoDateMatch;
+      return `${Number(dd)}.${Number(mm)}.${yyyy}`;
+    }
+  }
+
+  const parsedDate = date instanceof Date ? date : new Date(date);
+  return `${parsedDate.getDate()}.${parsedDate.getMonth() + 1}.${parsedDate.getFullYear()}`;
 };

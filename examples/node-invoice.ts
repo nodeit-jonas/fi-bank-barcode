@@ -1,5 +1,5 @@
 import { writeFile } from 'node:fs/promises';
-import { generateBarcodePNG, generateBarcodeSVG } from '../src/index.ts';
+import { generateBarcodePNG, generateBarcodeSVG } from '../src';
 
 const input = {
   iban: 'FI58 1017 1000 0001 22',

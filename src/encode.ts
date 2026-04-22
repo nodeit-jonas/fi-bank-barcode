@@ -45,7 +45,14 @@ export const encodeV5 = (input: BarcodeInputV5): string => {
   const rfReference = validateRFReference(input.rfReference);
   const dueDate = validateDueDate(input.dueDate);
 
-  const rfNumeric = (rfReference.slice(2, 4) + rfReference.slice(4)).padStart(23, '0');
+  const rfNumericRaw = rfReference.slice(2, 4) + rfReference.slice(4);
+  if (rfNumericRaw.length > 23) {
+    throw new BarcodeError(
+      BarcodeErrorCode.INVALID_RF_REFERENCE,
+      'RF reference is too long for v5 barcode payload.',
+    );
+  }
+  const rfNumeric = rfNumericRaw.padStart(23, '0');
 
   return assertPayloadLength(
     ['5', iban.slice(2), String(euros).padStart(6, '0'), String(cents).padStart(2, '0'), rfNumeric, dueDate].join(
@@ -56,8 +63,12 @@ export const encodeV5 = (input: BarcodeInputV5): string => {
 
 /** Encode a Finnish bank barcode payload (v4 or v5). */
 export const encodePayload = (input: BarcodeInput): string => {
-  const hasRef = 'reference' in input;
-  const hasRfRef = 'rfReference' in input;
+  const candidate = input as {
+    reference?: unknown;
+    rfReference?: unknown;
+  };
+  const hasRef = typeof candidate.reference === 'string' && candidate.reference.trim() !== '';
+  const hasRfRef = typeof candidate.rfReference === 'string' && candidate.rfReference.trim() !== '';
 
   if (hasRef === hasRfRef) {
     throw new BarcodeError(

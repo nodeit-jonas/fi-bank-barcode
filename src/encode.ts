@@ -63,8 +63,8 @@ export const encodeV5 = (input: BarcodeInputV5): string => {
 
 /** Encode a Finnish bank barcode payload (v4 or v5). */
 export const encodePayload = (input: BarcodeInput): string => {
-  const referenceValue: unknown = 'reference' in input ? input.reference : undefined;
-  const rfReferenceValue: unknown = 'rfReference' in input ? input.rfReference : undefined;
+  const referenceValue = 'reference' in input ? input.reference : undefined;
+  const rfReferenceValue = 'rfReference' in input ? input.rfReference : undefined;
   const hasRef = typeof referenceValue === 'string' && referenceValue.trim() !== '';
   const hasRfRef = typeof rfReferenceValue === 'string' && rfReferenceValue.trim() !== '';
 

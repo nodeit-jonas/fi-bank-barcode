@@ -61,7 +61,7 @@ export const formatDueDate = (date: Date | string): string => {
     );
   }
 
-  const parsedDate = date instanceof Date ? date : new Date(date);
+  const parsedDate = date;
   if (Number.isNaN(parsedDate.getTime())) {
     throw new BarcodeError(BarcodeErrorCode.INVALID_DUE_DATE, 'Due date must be a valid date.');
   }

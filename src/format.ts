@@ -1,3 +1,4 @@
+import { BarcodeError, BarcodeErrorCode } from './errors';
 import { validateAmount, validateDueDate, validateIBAN, validateNationalReference, validateRFReference } from './validation';
 
 const groupRight = (value: string, groupSize: number): string => {
@@ -53,8 +54,16 @@ export const formatDueDate = (date: Date | string): string => {
       const [, yyyy, mm, dd] = isoDateMatch;
       return `${Number(dd)}.${Number(mm)}.${yyyy}`;
     }
+
+    throw new BarcodeError(
+      BarcodeErrorCode.INVALID_DUE_DATE,
+      'Due date must be provided as an ISO YYYY-MM-DD string.',
+    );
   }
 
   const parsedDate = date instanceof Date ? date : new Date(date);
+  if (Number.isNaN(parsedDate.getTime())) {
+    throw new BarcodeError(BarcodeErrorCode.INVALID_DUE_DATE, 'Due date must be a valid date.');
+  }
   return `${parsedDate.getDate()}.${parsedDate.getMonth() + 1}.${parsedDate.getFullYear()}`;
 };

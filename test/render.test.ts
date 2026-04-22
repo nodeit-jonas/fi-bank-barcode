@@ -1,0 +1,53 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { BarcodeErrorCode } from '../src/errors';
+
+const bwipMock = vi.hoisted(() => ({
+  toSVG: vi.fn(() => '<svg>mock</svg>'),
+  toBuffer: vi.fn(async () => Buffer.from('mock')),
+}));
+
+vi.mock('bwip-js', () => ({
+  default: bwipMock,
+}));
+
+import { generateBarcodeDataURL, generateBarcodeSVG } from '../src/render';
+
+const input = {
+  iban: 'FI58 1017 1000 0001 22',
+  amount: 482.99,
+  reference: '55958 22432 94671',
+  dueDate: '2012-01-31',
+} as const;
+
+describe('render', () => {
+  beforeEach(() => {
+    bwipMock.toSVG.mockClear();
+    bwipMock.toBuffer.mockClear();
+  });
+
+  it('generates SVG output', () => {
+    const svg = generateBarcodeSVG(input);
+    expect(svg).toContain('<svg');
+    expect(bwipMock.toSVG).toHaveBeenCalledOnce();
+  });
+
+  it('generates a data URL', () => {
+    expect(generateBarcodeDataURL(input)).toMatch(/^data:image\/svg\+xml;base64,/);
+  });
+
+  it('enforces width and height constraints', () => {
+    try {
+      generateBarcodeSVG(input, { widthMm: 69 });
+      throw new Error('expected width validation to throw');
+    } catch (error) {
+      expect((error as { code?: string }).code).toBe(BarcodeErrorCode.INVALID_RENDER_OPTIONS);
+    }
+
+    try {
+      generateBarcodeSVG(input, { heightMm: 13 });
+      throw new Error('expected height validation to throw');
+    } catch (error) {
+      expect((error as { code?: string }).code).toBe(BarcodeErrorCode.INVALID_RENDER_OPTIONS);
+    }
+  });
+});

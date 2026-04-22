@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finnish Bank Barcode Example</title>
+  </head>
+  <body>
+    <img id="barcode" alt="Finnish bank barcode" />
+    <script type="module">
+      import { generateBarcodeDataURL } from '../dist/index.js';
+
+      const dataUrl = generateBarcodeDataURL({
+        iban: 'FI58 1017 1000 0001 22',
+        amount: 482.99,
+        reference: '55958 22432 94671',
+        dueDate: '2012-01-31',
+      });
+
+      document.querySelector('#barcode').src = dataUrl;
+    </script>
+  </body>
+</html>

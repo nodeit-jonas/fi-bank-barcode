@@ -125,7 +125,10 @@ export const validateRFReference = (ref: string): string => {
   return normalized;
 };
 
-/** Validate due date and encode as YYMMDD or 000000. */
+/**
+ * Validate due date and encode as YYMMDD or 000000.
+ * Date inputs are interpreted in local time; prefer YYYY-MM-DD strings for timezone-stable behavior.
+ */
 export const validateDueDate = (date: DueDateInput): string => {
   if (date == null) {
     return '000000';

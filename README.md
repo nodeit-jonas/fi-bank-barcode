@@ -61,6 +61,7 @@ const payload = encodePayload({
 
 - FI IBAN only (`FI` + 16 digits)
 - Missing due date encoded as `000000`
+- `dueDate` passed as `Date` is interpreted in local time; prefer `YYYY-MM-DD` string for timezone-stable behavior
 - Width and height are constrained to spec ranges
 - Human-readable text should not be placed directly above/below the barcode per spec
 

@@ -14,14 +14,14 @@ const DEFAULT_OPTIONS: Required<BarcodeRenderOptions> = {
 const resolveOptions = (options?: BarcodeRenderOptions): Required<BarcodeRenderOptions> => {
   const resolved = { ...DEFAULT_OPTIONS, ...options };
 
-  if (resolved.widthMm < 70 || resolved.widthMm > 105) {
+  if (!Number.isFinite(resolved.widthMm) || resolved.widthMm < 70 || resolved.widthMm > 105) {
     throw new BarcodeError(
       BarcodeErrorCode.INVALID_RENDER_OPTIONS,
       'Barcode width must be between 70 and 105 millimeters.',
     );
   }
 
-  if (resolved.heightMm < 10 || resolved.heightMm > 12.7) {
+  if (!Number.isFinite(resolved.heightMm) || resolved.heightMm < 10 || resolved.heightMm > 12.7) {
     throw new BarcodeError(
       BarcodeErrorCode.INVALID_RENDER_OPTIONS,
       'Barcode height must be between 10.0 and 12.7 millimeters.',

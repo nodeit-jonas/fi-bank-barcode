@@ -56,4 +56,20 @@ describe('render', () => {
       expect((error as { code?: string }).code).toBe(BarcodeErrorCode.INVALID_RENDER_OPTIONS);
     }
   });
+
+  it('rejects non-finite width and height values', () => {
+    try {
+      generateBarcodeSVG(input, { widthMm: Number.NaN });
+      throw new Error('expected width validation to throw');
+    } catch (error) {
+      expect((error as { code?: string }).code).toBe(BarcodeErrorCode.INVALID_RENDER_OPTIONS);
+    }
+
+    try {
+      generateBarcodeSVG(input, { heightMm: Number.POSITIVE_INFINITY });
+      throw new Error('expected height validation to throw');
+    } catch (error) {
+      expect((error as { code?: string }).code).toBe(BarcodeErrorCode.INVALID_RENDER_OPTIONS);
+    }
+  });
 });

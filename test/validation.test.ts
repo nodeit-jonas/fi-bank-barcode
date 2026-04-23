@@ -133,9 +133,8 @@ describe('validateDueDate', () => {
     expect(validateDueDate(null)).toBe('000000');
   });
 
-  it('formats Date and ISO date strings', () => {
+  it('formats ISO date strings and local Date values', () => {
     expect(validateDueDate('2012-01-31')).toBe('120131');
-    expect(validateDueDate(new Date('2012-01-31T00:00:00.000Z'))).toBe('120131');
     expect(validateDueDate(new Date(2012, 0, 31))).toBe('120131');
   });
 

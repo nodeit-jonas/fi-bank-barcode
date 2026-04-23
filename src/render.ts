@@ -12,7 +12,14 @@ const DEFAULT_OPTIONS: Required<BarcodeRenderOptions> = {
 };
 
 const resolveOptions = (options?: BarcodeRenderOptions): Required<BarcodeRenderOptions> => {
-  const resolved = { ...DEFAULT_OPTIONS, ...options };
+  const resolved: Required<BarcodeRenderOptions> = {
+    heightMm: options?.heightMm ?? DEFAULT_OPTIONS.heightMm,
+    widthMm: options?.widthMm ?? DEFAULT_OPTIONS.widthMm,
+    includeHumanReadableText:
+      options?.includeHumanReadableText ?? DEFAULT_OPTIONS.includeHumanReadableText,
+    backgroundColor: options?.backgroundColor ?? DEFAULT_OPTIONS.backgroundColor,
+    barColor: options?.barColor ?? DEFAULT_OPTIONS.barColor,
+  };
 
   if (!Number.isFinite(resolved.widthMm) || resolved.widthMm < 70 || resolved.widthMm > 105) {
     throw new BarcodeError(

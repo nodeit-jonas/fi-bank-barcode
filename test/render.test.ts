@@ -72,4 +72,16 @@ describe('render', () => {
       expect((error as { code?: string }).code).toBe(BarcodeErrorCode.INVALID_RENDER_OPTIONS);
     }
   });
+
+  it('treats explicit undefined dimensions as not provided', () => {
+    generateBarcodeSVG(input, { widthMm: undefined, heightMm: undefined });
+
+    expect(bwipMock.toSVG).toHaveBeenCalledOnce();
+    expect(bwipMock.toSVG).toHaveBeenCalledWith(
+      expect.objectContaining({
+        width: 100,
+        height: 11,
+      }),
+    );
+  });
 });

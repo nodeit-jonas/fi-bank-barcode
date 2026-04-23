@@ -10,7 +10,7 @@ vi.mock('bwip-js', () => ({
   default: bwipMock,
 }));
 
-import { generateBarcodeDataURL, generateBarcodeSVG } from '../src/render';
+import { generateBarcodeDataURL, generateBarcodePNG, generateBarcodeSVG } from '../src/render';
 
 const input = {
   iban: 'FI58 1017 1000 0001 22',
@@ -33,6 +33,12 @@ describe('render', () => {
 
   it('generates a data URL', () => {
     expect(generateBarcodeDataURL(input)).toMatch(/^data:image\/svg\+xml;base64,/);
+  });
+
+  it('generates PNG bytes as Uint8Array', async () => {
+    const png = await generateBarcodePNG(input);
+    expect(png).toBeInstanceOf(Uint8Array);
+    expect(bwipMock.toBuffer).toHaveBeenCalledOnce();
   });
 
   it('enforces width and height constraints', () => {

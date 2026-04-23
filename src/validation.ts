@@ -20,11 +20,11 @@ const parseIsoDate = (value: string): Date | null => {
     return null;
   }
   const [, y, m, d] = match;
-  const date = new Date(Date.UTC(Number(y), Number(m) - 1, Number(d)));
+  const date = new Date(Number(y), Number(m) - 1, Number(d));
   if (
-    date.getUTCFullYear() !== Number(y) ||
-    date.getUTCMonth() !== Number(m) - 1 ||
-    date.getUTCDate() !== Number(d)
+    date.getFullYear() !== Number(y) ||
+    date.getMonth() !== Number(m) - 1 ||
+    date.getDate() !== Number(d)
   ) {
     return null;
   }
@@ -77,7 +77,7 @@ export const validateNationalReference = (ref: string): string => {
   }
 
   const body = normalized.slice(0, -1);
-  const checkDigit = Number(normalized.at(-1));
+  const checkDigit = Number(normalized[normalized.length - 1]);
   const weights = [7, 3, 1];
 
   let sum = 0;
@@ -144,9 +144,9 @@ export const validateDueDate = (date: DueDateInput): string => {
   } else if (typeof date === 'string') {
     const parsed = parseIsoDate(date);
     if (parsed) {
-      year = parsed.getUTCFullYear();
-      month = parsed.getUTCMonth() + 1;
-      day = parsed.getUTCDate();
+      year = parsed.getFullYear();
+      month = parsed.getMonth() + 1;
+      day = parsed.getDate();
     }
   }
 

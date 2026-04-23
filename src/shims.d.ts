@@ -3,7 +3,7 @@ declare module 'bwip-js' {
 
   const bwipjs: {
     toSVG(options: BWIPOptions): string;
-    toBuffer(options: BWIPOptions): Promise<Buffer>;
+    toBuffer(options: BWIPOptions): Promise<Uint8Array>;
   };
 
   export default bwipjs;

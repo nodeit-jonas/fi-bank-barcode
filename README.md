@@ -43,7 +43,7 @@ const payload = encodePayload({
 - `encodeV4(input)`
 - `encodeV5(input)`
 - `generateBarcodeSVG(input, options?)`
-- `generateBarcodePNG(input, options?)`
+- `generateBarcodePNG(input, options?)` (returns `Promise<Uint8Array>`)
 - `generateBarcodeDataURL(input, options?)`
 - `validateIBAN/validateAmount/validateNationalReference/validateRFReference/validateDueDate`
 - `formatIBAN/formatReference/formatRFReference/formatAmount/formatDueDate`

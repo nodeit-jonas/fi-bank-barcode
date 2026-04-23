@@ -36,11 +36,12 @@ const toB64 = (value: string): string => {
     return Buffer.from(value, 'utf8').toString('base64');
   }
   const bytes = new TextEncoder().encode(value);
-  let binary = '';
-  for (const byte of bytes) {
-    binary += String.fromCharCode(byte);
+  const chunkSize = 0x8000;
+  const parts: string[] = [];
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    parts.push(String.fromCharCode(...bytes.subarray(i, i + chunkSize)));
   }
-  return btoa(binary);
+  return btoa(parts.join(''));
 };
 
 const buildBwipOptions = (payload: string, options: Required<BarcodeRenderOptions>) => ({
@@ -64,7 +65,7 @@ export const generateBarcodeSVG = (input: BarcodeInput, options?: BarcodeRenderO
 export const generateBarcodePNG = async (
   input: BarcodeInput,
   options?: BarcodeRenderOptions,
-): Promise<Buffer> => {
+): Promise<Uint8Array> => {
   const payload = encodePayload(input);
   const resolved = resolveOptions(options);
   return bwipjs.toBuffer(buildBwipOptions(payload, resolved));

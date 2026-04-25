@@ -2,6 +2,10 @@
   "name": "finnish-bank-barcode",
   "version": "1.0.0",
   "description": "Generate Finnish bank barcode payloads and Code 128 barcodes.",
+  "author": {
+    "name": "nodeit-jonas",
+    "email": "info@nodeit.fi"
+  },
   "license": "MIT",
   "type": "module",
   "engines": {

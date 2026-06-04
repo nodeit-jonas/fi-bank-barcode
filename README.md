@@ -76,6 +76,8 @@ const payload = encodePayload({
 - `examples/node-invoice.ts`
 - `examples/browser.html`
 
+![Example Finnish bank barcode](examples/readme-example.png)
+
 ## Contributing
 
 Open an issue or PR. Always reference the official specification PDF for behavior changes.

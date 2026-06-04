@@ -87,7 +87,7 @@ Example input used to generate the rendered barcode below:
 }
 ```
 
-![Example Finnish bank barcode](examples/readme-example.png)
+![Example Finnish bank barcode](https://raw.githubusercontent.com/nodeit-jonas/fi-bank-barcode/main/examples/readme-example.png)
 
 ## Contributing
 

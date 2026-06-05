@@ -87,6 +87,14 @@ const input = {
 };
 ```
 
+<!--
+  Image path is intentionally relative. The asset is bundled in the npm
+  tarball via the `files` field in package.json, so this renders on both
+  GitHub (resolved against the repo at the README's ref) and npmjs.com
+  (resolved against the published package tarball). A relative path also
+  keeps the image tied to the same version/tag as the README, which an
+  absolute `raw.githubusercontent.com/.../main/...` URL would not.
+-->
 ![Example Finnish bank barcode](examples/readme-example.png)
 
 ## Contributing

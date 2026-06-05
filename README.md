@@ -76,6 +76,27 @@ const payload = encodePayload({
 - `examples/node-invoice.ts`
 - `examples/browser.html`
 
+Example input used to generate the rendered barcode below:
+
+```ts
+const input = {
+  iban: 'FI58 1017 1000 0001 22',
+  amount: 482.99,
+  reference: '55958 22432 94671',
+  dueDate: '2012-01-31',
+};
+```
+
+<!--
+  Image path is intentionally relative. The asset is bundled in the npm
+  tarball via the `files` field in package.json, so this renders on both
+  GitHub (resolved against the repo at the README's ref) and npmjs.com
+  (resolved against the published package tarball). A relative path also
+  keeps the image tied to the same version/tag as the README, which an
+  absolute `raw.githubusercontent.com/.../main/...` URL would not.
+-->
+![Example Finnish bank barcode](examples/readme-example.png)
+
 ## Contributing
 
 Open an issue or PR. Always reference the official specification PDF for behavior changes.

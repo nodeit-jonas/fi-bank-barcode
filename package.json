@@ -20,6 +20,7 @@
   "files": [
     "dist",
     "README.md",
+    "examples/readme-example.png",
     "LICENSE"
   ],
   "repository": {
